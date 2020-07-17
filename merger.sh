@@ -4,6 +4,12 @@
 fromBranch=$1
 toBranch=$2
 tagName=$3
+originName=$4
+
+git branch --set-upstream-to=merge-test-1/master master
+git branch --set-upstream-to=merge-test-1/develop develop
+git branch --set-upstream-to=merge-test-1/qa qa
+
 
 # validate
 if [ -z "$fromBranch" ]; then
@@ -34,6 +40,7 @@ tagName="$tsUtc-$tagName"
 
 # checkout fromBrach
 git checkout $fromBranch
+git branch --set-upstream-to=$originName/$fromBranch $fromBranch
 exitCode=$?
 if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $fromBranch' failed with exit-code $exitCode"
@@ -41,8 +48,10 @@ if [ "$exitCode" != 0 ]; then
 fi
 
 
+
 # checkout toBranch
 git checkout $toBranch
+git branch --set-upstream-to=$originName/$toBranch $toBranch
 exitCode=$?
 if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
