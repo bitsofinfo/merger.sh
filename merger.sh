@@ -31,6 +31,24 @@ fi
 tsUtc=$(date -u +%Y%m%d_%H%M%SZ)
 tagName="$tsUtc-$tagName"
 
+
+# checkout fromBrach
+git checkout $fromBranch
+exitCode = $?
+if [ "$exitCode" != 0 ]; then
+    echo "[merger.sh] 'git checkout $fromBranch' failed with exit-code $exitCode"
+    exit $exitCode
+fi
+
+
+# checkout toBranch
+git checkout $toBranch
+exitCode = $?
+if [ "$exitCode" != 0 ]; then
+    echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
+    exit $exitCode
+fi
+
 # get current branch
 currBranch=$(git branch | grep \* | tr -cd '[:alnum:]')
 echo "[merger.sh] Current branch = $currBranch"
