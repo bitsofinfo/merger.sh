@@ -6,11 +6,6 @@ toBranch=$2
 tagName=$3
 originName=$4
 
-git branch --set-upstream-to=merge-test-1/master master
-git branch --set-upstream-to=merge-test-1/develop develop
-git branch --set-upstream-to=merge-test-1/qa qa
-
-
 # validate
 if [ -z "$fromBranch" ]; then
     echo "[merger.sh] fromBranch is required: usage: merger.sh fromBranchName toBranchName tagName"
