@@ -34,7 +34,7 @@ tagName="$tsUtc-$tagName"
 
 # checkout fromBrach
 git checkout $fromBranch
-exitCode = $?
+exitCode=$?
 if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $fromBranch' failed with exit-code $exitCode"
     exit $exitCode
@@ -43,7 +43,7 @@ fi
 
 # checkout toBranch
 git checkout $toBranch
-exitCode = $?
+exitCode=$?
 if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
     exit $exitCode
@@ -58,7 +58,7 @@ if [ "$currBranch" != "$toBranch" ]; then
     echo "[merger.sh] currBranch[$currBranch] != toBranch[$toBranch], executing 'git checkout $toBranch'...."
     git checkout $toBranch
     
-    exitCode = $?
+    exitCode=$?
     if [ "$exitCode" != 0 ]; then
         echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
         exit $exitCode
