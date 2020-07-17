@@ -110,13 +110,13 @@ fi
 echo "[merger.sh] 'git tag -a $tagName' from within $currBranch successful"
 
 # and lets push
-git push origin $tagName 
+git push $originName $tagName 
 exitCode=$?
 if [ "$exitCode" != 0 ]; then
-    echo "[merger.sh] 'git push origin $tagName' from within $currBranch failed with exit-code $exitCode"
+    echo "[merger.sh] 'git push $originName $tagName' from within $currBranch failed with exit-code $exitCode"
     exit $exitCode
 fi
 
-echo "[merger.sh] 'git push origin $tagName' from within $currBranch successful"
+echo "[merger.sh] 'git push $originName $tagName' from within $currBranch successful"
 
 exit 0
