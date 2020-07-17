@@ -4,6 +4,7 @@
 fromBranch=$1
 toBranch=$2
 tagName=$3
+originName=$4
 
 # validate
 if [ -z "$fromBranch" ]; then
@@ -16,6 +17,10 @@ if [ -z "$toBranch" ]; then
 fi
 if [ -z "$tagName" ]; then
     echo "[merger.sh] tagName is required: usage: merger.sh fromBranchName toBranchName tagName"
+    exit 1
+fi
+if [ -z "$originName" ]; then
+    echo "[merger.sh] tagName is required: usage: merger.sh fromBranchName toBranchName tagName originName"
     exit 1
 fi
 
@@ -31,7 +36,6 @@ fi
 tsUtc=$(date -u +%Y%m%d_%H%M%SZ)
 tagName="$tsUtc-$tagName"
 
-
 # checkout fromBrach
 git checkout $fromBranch
 exitCode=$?
@@ -39,7 +43,6 @@ if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $fromBranch' failed with exit-code $exitCode"
     exit $exitCode
 fi
-git fetch origin
 
 
 # checkout toBranch
@@ -49,7 +52,6 @@ if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
     exit $exitCode
 fi
-git fetch origin
 
 # get current branch
 currBranch=$(git branch | grep \* | tr -cd '[:alnum:]')
@@ -59,7 +61,6 @@ echo "[merger.sh] Current branch = $currBranch"
 if [ "$currBranch" != "$toBranch" ]; then
     echo "[merger.sh] currBranch[$currBranch] != toBranch[$toBranch], executing 'git checkout $toBranch'...."
     git checkout $toBranch
-    git fetch origin
     
     exitCode=$?
     if [ "$exitCode" != 0 ]; then
@@ -89,14 +90,14 @@ echo "[merger.sh] 'git merge $fromBranch' from within $currBranch successful"
 
 
 # ok lets push 
-git push
+git push -u $originName $currBranch
 exitCode=$?
 if [ "$exitCode" != 0 ]; then
-    echo "[merger.sh] 'git push' from within $currBranch failed with exit-code $exitCode"
+    echo "[merger.sh] 'git push -u $originName $currBranch' from within $currBranch failed with exit-code $exitCode"
     exit $exitCode
 fi
 
-echo "[merger.sh] 'git push' from within $currBranch successful"
+echo "[merger.sh] 'git push -u $originName $currBranch' from within $currBranch successful"
 
 # ok lets tag
 git tag -a $tagName -m "merger.sh $fromBrach -> $toBranch at $tsUtc: tag=$tagName"
@@ -109,13 +110,13 @@ fi
 echo "[merger.sh] 'git tag -a $tagName' from within $currBranch successful"
 
 # and lets push
-git push origin $tagName 
+git push -u $originName $tagName 
 exitCode=$?
 if [ "$exitCode" != 0 ]; then
-    echo "[merger.sh] 'git push origin $tagName' from within $currBranch failed with exit-code $exitCode"
+    echo "[merger.sh] 'git push -u $originName $tagName' from within $currBranch failed with exit-code $exitCode"
     exit $exitCode
 fi
 
-echo "[merger.sh] 'git push origin $tagName' from within $currBranch successful"
+echo "[merger.sh] 'git push -u $originName $tagName' from within $currBranch successful"
 
 exit 0
