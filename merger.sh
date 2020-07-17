@@ -39,7 +39,7 @@ if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $fromBranch' failed with exit-code $exitCode"
     exit $exitCode
 fi
-git fetch
+git fetch origin
 
 
 # checkout toBranch
@@ -49,7 +49,7 @@ if [ "$exitCode" != 0 ]; then
     echo "[merger.sh] 'git checkout $toBranch' failed with exit-code $exitCode"
     exit $exitCode
 fi
-git fetch
+git fetch origin
 
 # get current branch
 currBranch=$(git branch | grep \* | tr -cd '[:alnum:]')
@@ -59,7 +59,7 @@ echo "[merger.sh] Current branch = $currBranch"
 if [ "$currBranch" != "$toBranch" ]; then
     echo "[merger.sh] currBranch[$currBranch] != toBranch[$toBranch], executing 'git checkout $toBranch'...."
     git checkout $toBranch
-    git fetch
+    git fetch origin
     
     exitCode=$?
     if [ "$exitCode" != 0 ]; then
